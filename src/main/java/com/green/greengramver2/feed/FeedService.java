@@ -1,6 +1,7 @@
 package com.green.greengramver2.feed;
 
 import com.green.greengramver2.common.MyFileUtils;
+import com.green.greengramver2.feed.model.FeedPicDTO;
 import com.green.greengramver2.feed.model.FeedPostReq;
 import com.green.greengramver2.feed.model.FeedPostRes;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -29,16 +31,25 @@ public class FeedService {
             // 폴더 생성
             myFileUtils.makeFolders(middlePath);
 
+            // 랜덤 파일명 저장용 >> feed_pics 테이블에 저장할 때 사용
+            List<String> picList = new ArrayList<>(pics.size());
+            
             for(MultipartFile pic : pics) {
                 String saveFileName = myFileUtils.makeRandomFileName(pic);
                 String filePath = String.format("%s/%s", middlePath, saveFileName);
 
+                picList.add(saveFileName);
+                
                 try {
                     myFileUtils.transferTo(pic, filePath);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+            FeedPicDTO feedPicDTO = new FeedPicDTO();
+
+            feedPicDTO.setFeedId(feedId);
+            feedPicDTO.setPics(picList);
         }
 
         return null;
