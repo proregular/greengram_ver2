@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("user")
+@RequestMapping("/user")
 @Tag(name="유저", description = "유저 관련 API")
 public class UserController {
     private final UserService service;
@@ -32,7 +32,7 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("sing-in")
+    @PostMapping("sign-in")
     @Operation(summary = "로그인")
     public ResultResponse<UserSignInRes> signIn(@RequestBody UserSignInReq p) {
         UserSignInRes res = service.signIn(p);

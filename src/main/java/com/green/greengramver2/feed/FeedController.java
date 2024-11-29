@@ -1,16 +1,18 @@
 package com.green.greengramver2.feed;
 
 import com.green.greengramver2.common.model.ResultResponse;
+import com.green.greengramver2.feed.model.FeedGetReq;
+import com.green.greengramver2.feed.model.FeedGetRes;
 import com.green.greengramver2.feed.model.FeedPostReq;
 import com.green.greengramver2.feed.model.FeedPostRes;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -21,8 +23,10 @@ public class FeedController {
     private final FeedService service;
 
     @PostMapping
+    @Operation(summary = "Feed 등록", description = "피드를 등록하는 API")
     public ResultResponse<FeedPostRes> postFeed(@RequestPart List<MultipartFile> pics
                                               , @RequestPart FeedPostReq p) {
+        log.info("p----------------------: {}", p);
         FeedPostRes res = service.postFeed(pics, p);
 
         return ResultResponse.<FeedPostRes>builder()
@@ -31,5 +35,16 @@ public class FeedController {
                 .build();
     }
 
+    @GetMapping
+    @Operation(summary = "Feed 조회", description = "피드를 조회하는 API")
+    public ResultResponse<List<FeedGetRes>> getFeedList(@ParameterObject @ModelAttribute FeedGetReq p) {
+        log.info("p----------------------: {}", p);
 
+        List<FeedGetRes> list = service.getFeedList(p);
+
+        return ResultResponse.<List<FeedGetRes>>builder()
+                .resultMessage(String.format("%d rows", list.size()))
+                .resultData(list)
+                .build();
+    }
 }
