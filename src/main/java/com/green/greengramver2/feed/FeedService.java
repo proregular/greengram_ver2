@@ -1,6 +1,10 @@
 package com.green.greengramver2.feed;
 
 import com.green.greengramver2.common.MyFileUtils;
+import com.green.greengramver2.feed.comment.FeedCommentMapper;
+import com.green.greengramver2.feed.comment.model.FeedCommentDto;
+import com.green.greengramver2.feed.comment.model.FeedCommentGetReq;
+import com.green.greengramver2.feed.comment.model.FeedCommentGetRes;
 import com.green.greengramver2.feed.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +22,7 @@ import java.util.List;
 public class FeedService {
     private final FeedMapper feedMapper;
     private final FeedPicsMapper picsMapper;
+    private final FeedCommentMapper feedCommentMapper;
     private final MyFileUtils myFileUtils;
 
     @Transactional
@@ -64,6 +69,22 @@ public class FeedService {
 
         for(FeedGetRes item : list) {
             item.setPics(picsMapper.selFeedPics(item.getFeedId()));
+
+            //피드당 댓글 4개
+            FeedCommentGetReq commentGetReq = new FeedCommentGetReq();
+            commentGetReq.setSize(1);
+            commentGetReq.setFeedId(item.getFeedId());
+
+           List<FeedCommentDto> commentList = feedCommentMapper.selFeedCommentList(commentGetReq);
+
+            FeedCommentGetRes commentGetRes = new FeedCommentGetRes();
+            commentGetRes.setCommentList(commentList);
+            commentGetRes.setMoreComment(commentList.size() == commentGetReq.getSize());
+
+            if(commentGetRes.isMoreComment()) {
+                commentList.remove(commentList.size() - 1);
+            }
+            item.setComment(commentGetRes);
         }
 
         return list;
