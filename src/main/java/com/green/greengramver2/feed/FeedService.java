@@ -71,11 +71,9 @@ public class FeedService {
             item.setPics(picsMapper.selFeedPics(item.getFeedId()));
 
             //피드당 댓글 4개
-            FeedCommentGetReq commentGetReq = new FeedCommentGetReq();
-            commentGetReq.setSize(1);
-            commentGetReq.setFeedId(item.getFeedId());
+            FeedCommentGetReq commentGetReq = new FeedCommentGetReq(item.getFeedId(), 1);
 
-           List<FeedCommentDto> commentList = feedCommentMapper.selFeedCommentList(commentGetReq);
+            List<FeedCommentDto> commentList = feedCommentMapper.selFeedCommentList(commentGetReq);
 
             FeedCommentGetRes commentGetRes = new FeedCommentGetRes();
             commentGetRes.setCommentList(commentList);

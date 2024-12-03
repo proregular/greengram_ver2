@@ -9,6 +9,7 @@
         , user_id = #{userId}
         , comment = #{comment}
     </insert>
+
     <select id="selFeedCommentList">
         SELECT A.feed_comment_id AS feedCommentId
              , A.comment
