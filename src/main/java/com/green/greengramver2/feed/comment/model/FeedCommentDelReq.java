@@ -1,17 +1,24 @@
 package com.green.greengramver2.feed.comment.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.web.bind.annotation.BindParam;
 
-@Getter
-@Setter
-public class FeedCommentDelReq {
-    private long feedCommentId;
-    private long signedUserId;
+import java.beans.ConstructorProperties;
 
-    public FeedCommentDelReq(@BindParam("feed_comment_id") long feedCommentId, @BindParam("signed_user_id") long signedUserId) {
+@Getter
+@ToString
+public class FeedCommentDelReq {
+    @Schema(name="feed_comment_id")
+    private long feedCommentId;
+    @Schema(name="signed_user_id")
+    private long userId;
+
+    @ConstructorProperties({"feed_comment_id", "signed_user_id"})
+    public FeedCommentDelReq(long feedCommentId, long signedUserId) {
         this.feedCommentId = feedCommentId;
-        this.signedUserId = signedUserId;
+        this.userId = signedUserId;
     }
 }

@@ -2,6 +2,9 @@
 file:
   directory: D:/SGSG/download/green_gram_ver2
 
+const:
+  default-page-size: 20
+
 #MyBatis 설정
 mybatis:
   mapper-locations: mappers/**/*.xml
